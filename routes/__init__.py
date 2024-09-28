@@ -6,3 +6,4 @@ import routes.klotski
 import routes.digitalcolony
 import routes.bugfixer1
 import routes.kazuma
+import routes.bugfixer2
