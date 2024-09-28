@@ -2,6 +2,10 @@ import re
 from collections import Counter
 import requests
 import json
+from flask import request
+
+from routes import app
+
 # get list of five-letter words from meaningpedia.com
 meaningpedia_resp = requests.get(
     "https://meaningpedia.com/5-letter-words?show=all")
@@ -77,5 +81,3 @@ def get_next_best_guess(word_list, guess_history, evaluation_history):
     # Step 4: Select Best Guess
     best_guess = max(word_scores, key=word_scores.get)
     return best_guess
-
-

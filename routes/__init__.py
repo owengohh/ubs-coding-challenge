@@ -11,3 +11,4 @@ import routes.bugfixer2
 import routes.miniinterpreter
 import routes.mailtime
 import routes.coolcode
+import routes.wordle
