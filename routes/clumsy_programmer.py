@@ -26,7 +26,7 @@ def clumsy_programmer(dictionary, mistypes):
     corrected_words = []
     for word in mistypes:
         closest_word = min(
-            dictionary, key=lambda w: Levenshtein.distance(word, w))
+            dictionary, key=lambda w, current_word=word: Levenshtein.distance(current_word, w))
         corrected_words.append(closest_word)
     return {
         "corrections": corrected_words
