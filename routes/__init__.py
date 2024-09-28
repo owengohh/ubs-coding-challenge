@@ -10,3 +10,4 @@ import routes.clumsy_programmer
 import routes.bugfixer2
 import routes.miniinterpreter
 import routes.mailtime
+import routes.coolcode
