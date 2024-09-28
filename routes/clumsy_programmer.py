@@ -1,7 +1,6 @@
-import os
 import json
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from flask import request
 
 from routes import app
@@ -35,26 +34,12 @@ def find_closest_word(word, dict):
     return word
 
 
-def process_chunk(chunk, dict_set):
-    return [find_closest_word(word, dict_set) for word in chunk]
-
-
 def clumsy_programmer(dict, mistypes):
     dict_set = set(dict)
     corrected_words = []
-    num_threads = min(32, os.cpu_count() + 4)
-    chunk_size = max(1, len(mistypes) // num_threads)
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        futures = []
-        for i in range(0, len(mistypes), chunk_size):
-            chunk = mistypes[i:i + chunk_size]
-            futures.append(executor.submit(process_chunk, chunk, dict_set))
-
-        for future in as_completed(futures):
-            try:
-                corrected_words.extend(future.result())
-            except Exception as e:
-                print(f"Error processing chunk: {e}")
+    for word in mistypes:
+        corrected_word = find_closest_word(word, dict_set)
+        corrected_words.append(corrected_word)
     return {
         "corrections": corrected_words
     }
