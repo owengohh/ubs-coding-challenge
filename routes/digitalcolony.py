@@ -1,5 +1,7 @@
 import json
 import logging
+import collections
+import functools
 
 from flask import request
 
@@ -11,6 +13,35 @@ class Node:
     def __init__(self, val):
         self.val = val
         self.next = None
+
+def solve(colony, generations):
+    colony = [int(i) for i in colony]
+    cur_sum = colony[0]
+    cache = collections.defaultdict(int)
+    for i in range(1, len(colony)):
+        key = str(colony[i-1]) + str(colony[i])
+        cache[key] += 1
+        cur_sum += colony[i]
+
+    for _ in range(generations):
+        new_sum = cur_sum
+        next_cache = collections.defaultdict(int)
+        for key in cache:
+            if cache[key]:
+                a = int(key[0])
+                b = int(key[-1])
+
+                new_digit = helper(a, b, cur_sum)
+                new_sum += new_digit * cache[key]
+                new_pair = key[0]+str(new_digit)
+                new_pair2 = str(new_digit)+key[-1]
+
+                next_cache[new_pair] += cache[key]
+                next_cache[new_pair2] += cache[key]
+
+        cur_sum = new_sum
+        cache = next_cache
+    return(str(cur_sum))
 
 
 def solve_10(colony, n):
@@ -26,11 +57,9 @@ def solve_10(colony, n):
         cur = prev.next
         new_sum = cur_sum
         while cur:
-            # logging.info("hi")
-
             new_node = Node(0)
-
             temp = helper(prev.val, cur.val, cur_sum)
+
             new_sum += temp
             new_node.val = temp
             prev.next, new_node.next = new_node, prev.next
@@ -40,8 +69,9 @@ def solve_10(colony, n):
         cur_sum = new_sum
 
     return str(cur_sum)
+# O(n^3?)
 
-
+@functools.cache
 def helper(a, b, s):
     if a > b:
         return (s + (a - b)) % 10
@@ -60,10 +90,10 @@ def evaluateDigitalColony():
     for obj in data:
         generations = int(obj.get("generations"))
         colony = obj.get("colony")
-        if generations >= 30:
-            result.append("0")
-        else:
-            result.append(solve_10(colony, generations))
+        # if generations >= 30:
+        #     result.append("0")
+        # else:
+        result.append(solve(colony, generations))
 
     logging.info("My result :{}".format(result))
     return json.dumps(result)
