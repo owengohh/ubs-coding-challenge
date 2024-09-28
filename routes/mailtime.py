@@ -37,7 +37,7 @@ def eval_mailtime():
             if len(people[person]) == 0:
                 result[person] = 0
             else:
-                result[person] = sum(people[person])//len(people[person])
+                result[person] = round(sum(people[person])/len(people[person]))
 
         return {"response": result}
 
