@@ -1,4 +1,4 @@
-import Levenshtein
+import os
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -22,21 +22,40 @@ def eval_clumsy_programmer():
     return json.dumps(res)
 
 
+def one_char_difference(word1, word2):
+    if len(word1) != len(word2):
+        return False
+    differences = sum(1 for a, b in zip(word1, word2) if a != b)
+    return differences == 1
+
+
 def find_closest_word(word, dict):
-    return min(dict, key=lambda w: Levenshtein.distance(word, w))
+    for candidate in dict:
+        if one_char_difference(word, candidate):
+            return candidate
+    return word
+
+
+def process_chunk(chunk, dict_set):
+    return [find_closest_word(word, dict_set) for word in chunk]
 
 
 def clumsy_programmer(dict, mistypes):
+    dict_set = set(dict)
     corrected_words = []
-    with ThreadPoolExecutor() as executor:
-        futures = {executor.submit(
-            find_closest_word, word, dict): word for word in mistypes}
+    num_threads = min(32, os.cpu_count() + 4)
+    chunk_size = max(1, len(mistypes) // num_threads)
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = []
+        for i in range(0, len(mistypes), chunk_size):
+            chunk = mistypes[i:i + chunk_size]
+            futures.append(executor.submit(process_chunk, chunk, dict_set))
+
         for future in as_completed(futures):
             try:
-                closest_word = future.result()
-                corrected_words.append(closest_word)
+                corrected_words.extend(future.result())
             except Exception as e:
-                print(f"Error processing word {futures[future]}: {e}")
+                print(f"Error processing chunk: {e}")
     return {
         "corrections": corrected_words
     }
