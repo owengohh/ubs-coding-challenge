@@ -1,8 +1,6 @@
 import json
 import logging
-
 from flask import request
-
 from routes import app
 
 logger = logging.getLogger(__name__)
@@ -20,25 +18,35 @@ def eval_clumsy_programmer():
     return json.dumps(res)
 
 
-def one_char_difference(word1, word2):
-    if len(word1) != len(word2):
-        return False
-    differences = sum(1 for a, b in zip(word1, word2) if a != b)
-    return differences == 1
+def preprocess_dictionary(dictionary):
+    pattern_to_words = {}
+    for word in dictionary:
+        word = word.strip()
+        for i in range(len(word)):
+            # Create a pattern by replacing the character at position i with '_'
+            pattern = word[:i] + '_' + word[i+1:]
+            pattern_to_words.setdefault(pattern, set()).add(word)
+    return pattern_to_words
 
 
-def find_closest_word(word, dict):
-    for candidate in dict:
-        if one_char_difference(word, candidate):
-            return candidate
-    return word
+def find_closest_word(word, pattern_to_words):
+    for i in range(len(word)):
+        # Generate a pattern by replacing the character at position i with '_'
+        pattern = word[:i] + '_' + word[i+1:]
+        if pattern in pattern_to_words:
+            # Exclude the word itself from the candidates
+            candidates = pattern_to_words[pattern] - {word}
+            if candidates:
+                # Return the first candidate (you can modify this to select the best one if needed)
+                return next(iter(candidates))
+    return word  # Return the original word if no correction is found
 
 
-def clumsy_programmer(dict, mistypes):
-    dict_set = set(dict)
+def clumsy_programmer(dictionary, mistypes):
+    pattern_to_words = preprocess_dictionary(dictionary)
     corrected_words = []
     for word in mistypes:
-        corrected_word = find_closest_word(word, dict_set)
+        corrected_word = find_closest_word(word, pattern_to_words)
         corrected_words.append(corrected_word)
     return {
         "corrections": corrected_words
