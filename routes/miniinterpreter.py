@@ -55,6 +55,7 @@ def evaluate_expression(expression):
     tokens = tokenise(expression)
     tokensToEval = parse(tokens)
     result = evaluate(tokensToEval)
+    result = [str(val) for val in result]
     return result
 
 
