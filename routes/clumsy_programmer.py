@@ -1,8 +1,8 @@
-import Levenshtein
+from rapidfuzz import process
 import json
 import logging
 
-from flask import request, jsonify
+from flask import request
 
 from routes import app
 
@@ -25,8 +25,7 @@ def eval_clumsy_programmer():
 def clumsy_programmer(dictionary, mistypes):
     corrected_words = []
     for word in mistypes:
-        closest_word = min(
-            dictionary, key=lambda w, current_word=word: Levenshtein.distance(current_word, w))
+        closest_word = process.extractOne(word, dictionary)[0]
         corrected_words.append(closest_word)
     return {
         "corrections": corrected_words
