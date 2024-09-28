@@ -1,5 +1,4 @@
 import Levenshtein
-import json
 import logging
 
 from flask import request, jsonify
