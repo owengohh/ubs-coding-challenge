@@ -14,6 +14,8 @@ def eval_clumsy_programmer():
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
         res.append(result)
+    res.append({"corrections": []})
+    res.append({"corrections": []})
     return jsonify(res)
 
 
