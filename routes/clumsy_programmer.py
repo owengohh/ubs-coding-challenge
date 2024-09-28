@@ -1,4 +1,5 @@
 import Levenshtein
+import json
 import logging
 
 from flask import request, jsonify
@@ -13,12 +14,12 @@ def eval_clumsy_programmer():
     data = request.get_json()
     res = []
     for item in data[:4]:
-        logger.info("item sent for evaluation {}".format(item))
+        logging.info("item sent for evaluation {}".format(item))
         dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
         res.append(result)
-    return jsonify(res)
+    return json.dumps(res)
 
 
 def clumsy_programmer(dictionary, mistypes):
