@@ -22,8 +22,8 @@ def eval_ub5_flags():
             "password": "PASSWORD_HERE"
         },
         "pictureSteganography": {
-            "flagOne": "UB5-1{FLAG_ONE_CONTENTS_HERE}",
-            "flagTwo": "UB5-2{FLAG_TWO_CONTENTS_HERE}"
+            "flagOne": "UB5-1{1_am_d3f_n0t_old}",
+            "flagTwo": "UB5-2{1amlik3n3w}"
         },
         "reverseEngineeringTheDeal": {
             "flag": "FLAG_CONTENT_HERE",

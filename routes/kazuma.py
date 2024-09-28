@@ -27,6 +27,6 @@ def kazuma(monsters):
         for prev in range(i - 1, -1, -1):
             gain = monsters[i] - monsters[prev] + \
                 (dp[prev - 2] if prev - 2 >= 0 else 0)
-            print(i, prev, gain, dp[prev - 2] if prev - 2 >= 0 else 0)
+            # print(i, prev, gain, dp[prev - 2] if prev - 2 >= 0 else 0)
             dp[i] = max(dp[i-1], gain, dp[i])
     return {"efficiency": dp[-1]}
