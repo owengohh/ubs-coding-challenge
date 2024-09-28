@@ -29,21 +29,21 @@ def tokenise(expression):
     logging.info("tokens" + str(tokens))
     return tokens
 
-def parse(tokens):
+def parse(tokens, line_number):
     # handles brackets
     if len(tokens) == 0:
-        raise InterpreterError('Unexpected EOF')
+        raise InterpreterError(f'ERROR at line {line_number}')
     token = tokens.pop(0)
     if token == '(':
         stack = []
         while tokens[0] != ')':
-            stack.append(parse(tokens))
+            stack.append(parse(tokens, line_number))
             if len(tokens) == 0:
-                raise InterpreterError('Unexpected EOF')
+                raise InterpreterError(f'ERROR at line {line_number}')
         tokens.pop(0)  # remove the closing brace
         return stack
     elif token == ')':
-        raise InterpreterError('Unexpected )')
+        raise InterpreterError(f'ERROR at line {line_number}')
     else:
         return convert(token)
 
@@ -70,10 +70,10 @@ def convert(token):
 
 def evaluate_expression(expression, line_number, variables):
     tokens = tokenise(expression)
-    tokensToEval = parse(tokens)
+    tokensToEval = parse(tokens, line_number)
     result = evaluate(tokensToEval, line_number, variables)
     if result is None:
-        return None
+        return "null"
     elif isinstance(result, bool):
         return 'true' if result else 'false'
     else:
@@ -379,8 +379,8 @@ def evaluateMiniInterpreter():
         for i, expression in enumerate(expressions):
             line_number = i + 1
             evaled = evaluate_expression(expression, line_number, variables)
-            if evaled is not None:
-                result["output"].append(evaled)
+            # if evaled is not None:
+            result["output"].append(evaled)
     except InterpreterError as e:
         result["output"].append(str(e))
     except Exception as e:
