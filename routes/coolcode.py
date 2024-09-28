@@ -8,6 +8,6 @@ logger = logging.getLogger(__name__)
 @app.route('/coolcodehack', methods=['POST'])
 def eval_coolcodehack():
     return jsonify({
-        "username": "hello",
-        "password": "world"
+        "username": "tester123",
+        "password": "Password123!"
     })
