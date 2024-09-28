@@ -1,7 +1,7 @@
-from rapidfuzz import process
+import Levenshtein
 import json
 import logging
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import request
 
 from routes import app
@@ -22,12 +22,21 @@ def eval_clumsy_programmer():
     return json.dumps(res)
 
 
-def clumsy_programmer(dictionary, mistypes):
-    def process_word(word):
-        return process.extractOne(word, dictionary)[0]
+def find_closest_word(word, dict):
+    return min(dict, key=lambda w: Levenshtein.distance(word, w))
 
+
+def clumsy_programmer(dict, mistypes):
+    corrected_words = []
     with ThreadPoolExecutor() as executor:
-        corrected_words = list(executor.map(process_word, mistypes))
+        futures = {executor.submit(
+            find_closest_word, word, dict): word for word in mistypes}
+        for future in as_completed(futures):
+            try:
+                closest_word = future.result()
+                corrected_words.append(closest_word)
+            except Exception as e:
+                print(f"Error processing word {futures[future]}: {e}")
     return {
         "corrections": corrected_words
     }
