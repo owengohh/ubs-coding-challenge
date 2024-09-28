@@ -1,7 +1,7 @@
 from rapidfuzz import process
 import json
 import logging
-
+from concurrent.futures import ThreadPoolExecutor
 from flask import request
 
 from routes import app
@@ -23,10 +23,11 @@ def eval_clumsy_programmer():
 
 
 def clumsy_programmer(dictionary, mistypes):
-    corrected_words = []
-    for word in mistypes:
-        closest_word = process.extractOne(word, dictionary)[0]
-        corrected_words.append(closest_word)
+    def process_word(word):
+        return process.extractOne(word, dictionary)[0]
+
+    with ThreadPoolExecutor() as executor:
+        corrected_words = list(executor.map(process_word, mistypes))
     return {
         "corrections": corrected_words
     }
