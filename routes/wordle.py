@@ -1,17 +1,21 @@
 import re
 from collections import Counter
-import requests
-import json
+
 from flask import request, jsonify
 
 from routes import app
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+WORD_LIST_PATH = os.path.join(BASE_DIR, 'data', 'words.txt')
+
+
 @app.route('/wordle-game', methods=['POST'])
 def eval_wordle():
-    with open('./data/words.txt', 'r') as file:
+    with open(WORD_LIST_PATH, 'r') as file:
         word_list = [line.strip() for line in file if len(line.strip()) == 5]
     data = request.get_json()
     guess_history = data.get("guessHistory")
