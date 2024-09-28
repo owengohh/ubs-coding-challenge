@@ -12,35 +12,33 @@ def calculate_min_time(time_list, prerequisites):
     n = len(time_list)
     if n == 0:
         return 0
-    projects = [i+1 for i in range(n)]
-    duration = {i+1: time_list[i] for i in range(n)}  # Map project number to its duration
+    projects = [i + 1 for i in range(n)]
+    duration = {i + 1: time_list[i] for i in range(n)}  # Map project number to its duration
 
-    in_degree = {i+1: 0 for i in range(n)}
-    adj = {i+1: [] for i in range(n)}
+    indegrees = {i + 1: 0 for i in range(n)}
+    graph = {i + 1: [] for i in range(n)}
 
     for a, b in prerequisites:
-        adj[a].append(b)
-        in_degree[b] += 1
+        graph[a].append(b)
+        indegrees[b] += 1
 
-    earliest_start = {i+1: 0 for i in range(n)}
-    earliest_finish = {i+1: 0 for i in range(n)}
+    earliest_start = {i + 1: 0 for i in range(n)}
+    earliest_finish = {i + 1: 0 for i in range(n)}
 
-    queue = deque([u for u in projects if in_degree[u] == 0])
-    # queue = deque(queue)
+    queue = deque([project for project in projects if indegrees[project] == 0])
 
     # toposort algo
     while queue:
-        u = queue.popleft()
-        earliest_finish[u] = earliest_start[u] + duration[u]
+        project = queue.popleft()
+        earliest_finish[project] = earliest_start[project] + duration[project]
 
-        for v in adj[u]:
-            earliest_start[v] = max(earliest_start[v], earliest_finish[u])
-            in_degree[v] -= 1
-            if in_degree[v] == 0:
-                queue.append(v)
+        for preReq in graph[project]:
+            earliest_start[preReq] = max(earliest_start[preReq], earliest_finish[project])
+            indegrees[preReq] -= 1
+            if indegrees[preReq] == 0:
+                queue.append(preReq)
 
     total_time = max(earliest_finish.values())
-
     return total_time
 
 @app.route('/bugfixer/p1', methods=['POST'])

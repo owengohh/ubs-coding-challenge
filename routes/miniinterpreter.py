@@ -30,6 +30,7 @@ def tokenise(expression):
     return tokens
 
 def parse(tokens):
+    # handles brackets
     if len(tokens) == 0:
         raise InterpreterError('Unexpected EOF')
     token = tokens.pop(0)
