@@ -1,4 +1,4 @@
-import Levenshtein
+import difflib
 import logging
 
 from flask import request, jsonify
@@ -20,12 +20,17 @@ def eval_clumsy_programmer():
     return jsonify(res)
 
 
-def clumsy_programmer(dictionary, mistypes):
+def clumsy_programmer(dict, mistypes):
     corrected_words = []
     for word in mistypes:
-        closest_word = min(
-            dictionary, key=lambda w, current_word=word: Levenshtein.distance(current_word, w))
-        corrected_words.append(closest_word)
+        # Find the closest match using difflib
+        closest_matches = difflib.get_close_matches(
+            word, dict, n=1, cutoff=0.0)
+        if closest_matches:
+            corrected_words.append(closest_matches[0])
+        else:
+            # If no close match is found, keep the original word
+            corrected_words.append(word)
     return {
         "corrections": corrected_words
     }
