@@ -25,7 +25,7 @@ def eval_wordle():
     guess_history = data.get("guessHistory")
     evaluation_history = data.get("evaluationHistory")
     result = get_next_best_guess(word_list, guess_history, evaluation_history)
-    return json.dumps(result)
+    return json.dumps({"guess": result})
 
 
 def get_next_best_guess(word_list, guess_history, evaluation_history):
