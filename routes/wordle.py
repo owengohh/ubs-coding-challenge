@@ -9,18 +9,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# get list of five-letter words from meaningpedia.com
-meaningpedia_resp = requests.get(
-    "https://meaningpedia.com/5-letter-words?show=all")
-
-# compile regex
-pattern = re.compile(r'<span itemprop="name">(\w+)</span>')
-# find all matches
-word_list = pattern.findall(meaningpedia_resp.text)
-
-
 @app.route('/wordle-game', methods=['POST'])
 def eval_wordle():
+    with open('words.txt', 'r') as file:
+        word_list = [line.strip() for line in file if len(line.strip()) == 5]
     data = request.get_json()
     guess_history = data.get("guessHistory")
     evaluation_history = data.get("evaluationHistory")
