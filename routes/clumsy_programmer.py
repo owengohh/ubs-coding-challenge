@@ -15,7 +15,7 @@ def eval_clumsy_programmer():
     res = []
     for item in data:
         logger.info("item sent for evaluation {}".format(item))
-        dictionary = item.get("dict")
+        dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
         res.append(result)
