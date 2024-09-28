@@ -16,14 +16,14 @@ def eval_clumsy_programmer():
     res = []
     for item in data:
         logger.info("item sent for evaluation {}".format(item))
-        dict = item.get("dict")
+        dictionary = item.get("dict")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dict, mistypes)
         res.append(result)
     return jsonify(res)
 
 
-def clumsy_programmer(dict, mistypes):
+def clumsy_programmer(dictionary, mistypes):
     corrected_words = []
     for word in mistypes:
         closest_word = min(dict, key=lambda w: Levenshtein.distance(word, w))
