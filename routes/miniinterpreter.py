@@ -55,10 +55,6 @@ def evaluate_expression(expression):
     tokens = tokenise(expression)
     tokensToEval = parse(tokens)
     result = evaluate(tokensToEval)
-    if isinstance(result, list):
-        result = [str(val) for val in result]
-    else:
-        result = str(result)
     return result
 
 
@@ -226,6 +222,64 @@ def myMin(args):
     result = min(values)
     return format_number(result)
 
+def gt(args):
+    if len(args) != 2:
+        return
+    num1 = evaluate(args[0])
+    num2 = evaluate(args[1])
+    if not all(isinstance(n, (int, float)) for n in [num1, num2]):
+        return
+    return num1 > num2
+
+def lt(args):
+    if len(args) != 2:
+        return
+    num1 = evaluate(args[0])
+    num2 = evaluate(args[1])
+    if not all(isinstance(n, (int, float)) for n in [num1, num2]):
+        return
+    return num1 < num2
+
+def equal(args):
+    if len(args) != 2:
+        return
+    val1 = evaluate(args[0])
+    val2 = evaluate(args[1])
+    allowed_types = (int, float, str, bool, type(None))
+    if not isinstance(val1, allowed_types) or not isinstance(val2, allowed_types):
+        return
+    if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
+        return val1 == val2
+    else:
+        return type(val1) == type(val2) and val1 == val2
+
+def notEqual(args):
+    if len(args) != 2:
+        return
+    val1 = evaluate(args[0])
+    val2 = evaluate(args[1])
+    allowed_types = (int, float, str, bool, type(None))
+    if not isinstance(val1, allowed_types) or not isinstance(val2, allowed_types):
+        return
+    if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
+        return val1 != val2
+    else:
+        return type(val1) != type(val2) or val1 != val2
+
+def myStr(args):
+    if len(args) != 1:
+        return
+    val = evaluate(args[0])
+    allowed_types = (int, float, str, bool, type(None))
+    if not isinstance(val, allowed_types):
+        return
+    if val is None:
+        return 'null'
+    elif isinstance(val, bool):
+        return 'true' if val else 'false'
+    else:
+        return str(val)
+
 def dummy():
     return ""
 
@@ -244,12 +298,11 @@ function_table = {
     "abs": myAbs,
     "max": myMax,
     "min": myMin,
-    "min": dummy,
-    "gt": dummy,
-    "lt": dummy,
-    "equal": dummy,
-    "not_equal": dummy,
-    "str": dummy
+    "gt": gt,
+    "lt": lt,
+    "equal": equal,
+    "not_equal": notEqual,
+    "str": myStr
 
 }
 
@@ -265,12 +318,15 @@ def evaluateMiniInterpreter():
     result = {"output": []}
     
     for expr in expressions:
-        evaled = evaluate_expression(expr)
-        if evaled is not None:
-            if isinstance(result, list):
-                result["output"].extend(evaled)
-            else:
-                result["output"].append(evaled)
+        try:
+            evaled = evaluate_expression(expr)
+            if evaled is not None:
+                if isinstance(result, list):
+                    result["output"].extend(evaled)
+                else:
+                    result["output"].append(evaled)
+        except Exception as e:
+            result["output"].append("ERROR"+ str(e))
 
     logging.info("My result :{}".format(result))
     return json.dumps(result)
