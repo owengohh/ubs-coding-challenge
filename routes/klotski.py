@@ -14,8 +14,8 @@ def evaluate():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     res = []
-    res = []
     for item in data:
+        logger.info("item sent for evaluation {}".format(item))
         board = item.get("board")
         moves = item.get("moves")
         result = klotski(board, moves)
