@@ -55,7 +55,15 @@ def evaluate_expression(expression):
     tokens = tokenise(expression)
     tokensToEval = parse(tokens)
     result = evaluate(tokensToEval)
-    return result
+    if isinstance(result, list):
+        result = [str(val) for val in result]
+    elif isinstance(result, bool):
+        if result:
+            return "true"
+        else:
+            return "false"
+    else:
+        return str(result)
 
 
 def evaluate(toEval):
