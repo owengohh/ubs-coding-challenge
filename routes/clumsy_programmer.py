@@ -1,6 +1,5 @@
-import json
 import logging
-from flask import request
+from flask import request, jsonify
 from routes import app
 
 logger = logging.getLogger(__name__)
@@ -10,12 +9,12 @@ logger = logging.getLogger(__name__)
 def eval_clumsy_programmer():
     data = request.get_json()
     res = []
-    for item in data[:4]:
+    for item in data:
         dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
         res.append(result)
-    return json.dumps(res)
+    return jsonify(res)
 
 
 def preprocess_dictionary(dictionary):
