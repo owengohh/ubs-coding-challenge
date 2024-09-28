@@ -5,6 +5,9 @@ import json
 from flask import request
 
 from routes import app
+import logging
+
+logger = logging.getLogger(__name__)
 
 # get list of five-letter words from meaningpedia.com
 meaningpedia_resp = requests.get(
@@ -78,6 +81,7 @@ def get_next_best_guess(word_list, guess_history, evaluation_history):
         score = sum(letter_frequencies[letter] for letter in set(word))
         word_scores[word] = score
 
+    logging.info(f"Word scores: {word_scores}")
     # Step 4: Select Best Guess
     best_guess = max(word_scores, key=word_scores.get)
     return best_guess

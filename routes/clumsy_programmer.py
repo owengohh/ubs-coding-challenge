@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def eval_clumsy_programmer():
     data = request.get_json()
     res = []
-    for item in data:
+    for item in data[:4]:
         dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
