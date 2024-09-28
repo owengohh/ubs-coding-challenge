@@ -1,14 +1,13 @@
-import json
 import logging
 
-from flask import request
+from flask import request, jsonify
 from routes import app
 
 logger = logging.getLogger(__name__)
 
 @app.route('/coolcodehack', methods=['POST'])
 def eval_coolcodehack():
-    return json.dumps({
+    return jsonify({
         "username": "hello",
         "password": "world"
     })
