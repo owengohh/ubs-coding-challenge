@@ -29,5 +29,5 @@ def clumsy_programmer(dict, mistypes):
         closest_word = min(dict, key=lambda w: Levenshtein.distance(word, w))
         corrected_words.append(closest_word)
     return {
-        "corrected_words": corrected_words
+        "corrections": corrected_words
     }
