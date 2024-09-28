@@ -12,3 +12,4 @@ import routes.miniinterpreter
 import routes.mailtime
 import routes.coolcode
 import routes.wordle
+import routes.decode_conquer
