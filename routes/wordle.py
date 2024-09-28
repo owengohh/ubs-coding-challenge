@@ -2,7 +2,7 @@ import re
 from collections import Counter
 import requests
 import json
-from flask import request
+from flask import request, jsonify
 
 from routes import app
 import logging
@@ -25,7 +25,7 @@ def eval_wordle():
     guess_history = data.get("guessHistory")
     evaluation_history = data.get("evaluationHistory")
     result = get_next_best_guess(word_list, guess_history, evaluation_history)
-    return json.dumps({"guess": result})
+    return jsonify({"guess": result})
 
 
 def get_next_best_guess(word_list, guess_history, evaluation_history):
