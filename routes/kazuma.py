@@ -8,7 +8,7 @@ from routes import app
 logger = logging.getLogger(__name__)
 
 
-@app.route('/kazuma', methods=['POST'])
+@app.route('/efficient-hunter-kazuma', methods=['POST'])
 def eval_kazuma():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
