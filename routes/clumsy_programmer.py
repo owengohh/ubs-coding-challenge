@@ -18,7 +18,7 @@ def eval_clumsy_programmer():
         logger.info("item sent for evaluation {}".format(item))
         dictionary = item.get("dict")
         mistypes = item.get("mistypes")
-        result = clumsy_programmer(dict, mistypes)
+        result = clumsy_programmer(dictionary, mistypes)
         res.append(result)
     return jsonify(res)
 
@@ -26,7 +26,8 @@ def eval_clumsy_programmer():
 def clumsy_programmer(dictionary, mistypes):
     corrected_words = []
     for word in mistypes:
-        closest_word = min(dict, key=lambda w: Levenshtein.distance(word, w))
+        closest_word = min(
+            dictionary, key=lambda w: Levenshtein.distance(word, w))
         corrected_words.append(closest_word)
     return {
         "corrections": corrected_words
