@@ -1,7 +1,7 @@
 import json
 import logging
 
-from flask import request
+from flask import request, jsonify
 
 from routes import app
 
@@ -18,7 +18,7 @@ def eval_kazuma():
         monsters = item.get("monsters")
         result = kazuma(monsters)
         res.append(result)
-    return json.dumps(res)
+    return jsonify(res)
 
 
 def kazuma(monsters):
