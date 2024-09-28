@@ -11,10 +11,8 @@ logger = logging.getLogger(__name__)
 @app.route('/the-clumsy-programmer', methods=['POST'])
 def eval_clumsy_programmer():
     data = request.get_json()
-    logging.info("data sent for evaluation {}".format(data))
     res = []
     for item in data:
-        logger.info("item sent for evaluation {}".format(item))
         dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
