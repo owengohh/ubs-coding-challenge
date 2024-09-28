@@ -55,7 +55,10 @@ def evaluate_expression(expression):
     tokens = tokenise(expression)
     tokensToEval = parse(tokens)
     result = evaluate(tokensToEval)
-    result = [str(val) for val in result]
+    if isinstance(result, list):
+        result = [str(val) for val in result]
+    else:
+        result = str(result)
     return result
 
 
@@ -223,6 +226,9 @@ def myMin(args):
     result = min(values)
     return format_number(result)
 
+def dummy():
+    return ""
+
 function_table = {
     "set": mySet,
     "puts": myPuts,
@@ -238,6 +244,12 @@ function_table = {
     "abs": myAbs,
     "max": myMax,
     "min": myMin,
+    "min": dummy,
+    "gt": dummy,
+    "lt": dummy,
+    "equal": dummy,
+    "not_equal": dummy,
+    "str": dummy
 
 }
 
