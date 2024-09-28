@@ -58,9 +58,3 @@ def bugfixer_p1():
     # result = None
     logging.info("My result :{}".format(result))
     return json.dumps(result)
-
-import json
-from flask import Flask, request
-
-app = Flask(__name__)
-
