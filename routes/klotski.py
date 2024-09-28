@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/klotski', methods=['POST'])
-def evaluate():
+def evaluate_klotski():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     res = []
