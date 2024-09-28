@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 @app.route('/wordle-game', methods=['POST'])
 def eval_wordle():
-    with open('words.txt', 'r') as file:
+    with open('./data/words.txt', 'r') as file:
         word_list = [line.strip() for line in file if len(line.strip()) == 5]
     data = request.get_json()
     guess_history = data.get("guessHistory")
