@@ -15,10 +15,8 @@ word_list = pattern.findall(meaningpedia_resp.text)
 @app.route('/wordle-game', methods=['POST'])
 def eval_wordle():
     data = request.get_json()
-    res = []
-    word_list = data.get("wordList")
     guess_history = data.get("guessHistory")
-    evaluation_history = item.get("evaluationHistory")
+    evaluation_history = data.get("evaluationHistory")
     result = get_next_best_guess(word_list, guess_history, evaluation_history)
     return json.dumps(result)
 
