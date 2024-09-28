@@ -14,7 +14,6 @@ def eval_clumsy_programmer():
     data = request.get_json()
     res = []
     for item in data[:4]:
-        logging.info("item sent for evaluation {}".format(item))
         dictionary = item.get("dictionary")
         mistypes = item.get("mistypes")
         result = clumsy_programmer(dictionary, mistypes)
