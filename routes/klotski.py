@@ -10,11 +10,19 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/klotski', methods=['POST'])
-def klotski():
+def evaluate():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
-    board = data.get("board")
-    moves = data.get("moves")
+    res = []
+    for i in range(len(data)):
+        board = data[i].get("board")
+        moves = data[i].get("moves")
+        result = klotski(board, moves)
+        res.append(result)
+    return json.dumps(res)
+
+
+def klotski(board, moves):
     directions = {
         "W": (0, -1),
         "N": (-1, 0),
@@ -55,4 +63,4 @@ def klotski():
         for pos in positions:
             x, y = pos
             updated_board[x][y] = ch
-    return json.dumps("".join(["".join(row) for row in updated_board]))
+    return "".join(["".join(row) for row in updated_board])
