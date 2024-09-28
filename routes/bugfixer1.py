@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 def calculate_min_time(time_list, prerequisites):
     n = len(time_list)
+    if n == 0:
+        return 0
     projects = [i+1 for i in range(n)]
     duration = {i+1: time_list[i] for i in range(n)}  # Map project number to its duration
 
