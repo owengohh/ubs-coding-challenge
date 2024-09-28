@@ -5,3 +5,4 @@ import routes.square
 import routes.klotski
 import routes.digitalcolony
 import routes.bugfixer1
+import routes.kazuma
