@@ -73,7 +73,7 @@ def evaluate_expression(expression, line_number, variables):
     tokensToEval = parse(tokens, line_number)
     result = evaluate(tokensToEval, line_number, variables)
     if result is None:
-        return "null"
+        return None
     elif isinstance(result, bool):
         return 'true' if result else 'false'
     else:
@@ -379,8 +379,8 @@ def evaluateMiniInterpreter():
         for i, expression in enumerate(expressions):
             line_number = i + 1
             evaled = evaluate_expression(expression, line_number, variables)
-            # if evaled is not None:
-            result["output"].append(evaled)
+            if evaled is not None:
+                result["output"].append(evaled)
     except InterpreterError as e:
         result["output"].append(str(e))
     except Exception as e:
